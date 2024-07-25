@@ -21,14 +21,11 @@ public class RefreshToken {
     private int tokenId;
 
     @Column(name = "token", nullable = false, length = 500)
-    @NotBlank(message = "Token should not be blank")
     private String token;
 
     @Column(name = "expiration_time", nullable = false)
-    @NotBlank(message = "Expiration time should not be blank")
     private Instant expirationTime;
 
     @OneToOne
-    @NotBlank(message = "User should not be blank")
     private UserEntity user;
 }

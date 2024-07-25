@@ -30,19 +30,12 @@ public class UserEntity implements UserDetails {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "username", nullable = false)
-    @NotBlank(message = "Username should not be blank")
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
     @Column(name = "password", nullable = false)
-    @NotBlank(message = "Password should not be blank")
     @Size(min = 8, message = "Password should have at least 8 characters")
     private String password;
-
-    @Column(name = "email", nullable = false)
-    @Email(message = "Email should be valid")
-    @NotBlank(message = "Email should not be blank")
-    private String email;
 
     @Enumerated(jakarta.persistence.EnumType.STRING)
     private UserRole role;

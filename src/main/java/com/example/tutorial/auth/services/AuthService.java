@@ -26,27 +26,33 @@ public class AuthService {
         var user = UserEntity.builder()
                 .username(registerRequest.getUsername())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .email(registerRequest.getEmail())
                 .role(UserRole.USER)
                 .build();
         UserEntity savedUser = userRepository.save(user);
 
-        var accessToken = jwtService.generateToken(savedUser);
-        var refreshToken = refreshTokenService.createRefreshToken(savedUser.getEmail());
+        try {
+            var accessToken = jwtService.generateToken(savedUser);
+            var refreshToken = refreshTokenService.createRefreshToken(savedUser.getUsername());
 
-        return AuthResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken.getToken())
-                .build();
+            System.out.println("User registered: " + savedUser.getUsername());
+
+            return AuthResponse.builder()
+                    .accessToken(accessToken)
+                    .refreshToken(refreshToken.getToken())
+                    .build();
+
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     public AuthResponse login(LoginRequest loginRequest) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
-        var user = userRepository.findByEmail(loginRequest.getEmail())
+        var user = userRepository.findByUsername(loginRequest.getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
         var accessToken = jwtService.generateToken(user);
-        var refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
+        var refreshToken = refreshTokenService.createRefreshToken(user.getUsername());
 
         return AuthResponse.builder()
                 .accessToken(accessToken)

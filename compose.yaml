@@ -1,0 +1,10 @@
+version: '3'
+services:
+  postgrestimo:
+    image: ankane/pgvector
+    environment:
+      POSTGRES_USER: guest
+      POSTGRES_PASSWORD: cocacola
+      POSTGRES_DB: movies
+    ports:
+      - "6969:5432"
