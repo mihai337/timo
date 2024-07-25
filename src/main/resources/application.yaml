@@ -1,0 +1,19 @@
+spring.application.name: tutorial
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:6969/movies
+    username: guest
+    password: cocacola
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+project:
+  poster: posters/
+  baseurl: http://localhost:8080
